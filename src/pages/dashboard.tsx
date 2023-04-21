@@ -4,10 +4,10 @@ import { Box } from '@chakra-ui/react';
 import { useWeb3Modal } from '@web3modal/react';
 import moment from 'moment';
 import Head from 'next/head';
-import  Router  from 'next/router';
+import Router from 'next/router';
 import Script from 'next/script';
 import React, { useEffect, useState } from 'react';
-import { useAccount, useDisconnect, useBalance  } from 'wagmi';
+import { useAccount, useDisconnect, useBalance } from 'wagmi';
 
 function Dashboard() {
 
@@ -16,12 +16,13 @@ function Dashboard() {
     const [day, setDay] = useState("Good Morning")
     const { address } = useAccount()
     const [toggle, setToggle] = useState(false)
-   const [balanceValue, setBalanceValue]= useState({formatted:0.0})
+    const [balanceValue, setBalanceValue] = useState({ formatted: 0.0 })
+    const [activeTab, setActiveTab] = useState(false)
 
- const { data, isError, isLoading }:any = useBalance({
-            address: address,
-          })
-    
+    const { data, isError, isLoading }: any = useBalance({
+        address: address,
+    })
+
 
     useEffect(() => {
         setTime(moment(new Date).format('h:mm a'))
@@ -39,10 +40,10 @@ function Dashboard() {
             setDay('Good Evening')
         }
         if (address) {
-       
-          setBalanceValue(data)
+
+            setBalanceValue(data)
         }
-    
+
     }, [])
 
     const toggle_element = () => {
@@ -52,7 +53,7 @@ function Dashboard() {
         element.style.transform = ("translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)")
         var element2: any = document.getElementById("toggle_Amount");
         element2.style.transform = ("rotate(180deg)");
-    element2.style.transition=("1s ease-in")
+        element2.style.transition = ("1s ease-in")
     }
 
 
@@ -64,19 +65,19 @@ function Dashboard() {
         setToggle(false)
         var element2: any = document.getElementById("toggle_Amount");
         element2.style.transform = ("rotate(0deg)");
-    element2.style.transition=("1s ease-in")
-    
+        element2.style.transition = ("1s ease-in")
+
     }
 
-    
-    const { disconnect } = useDisconnect()
- 
 
-  
-  const Disconnect = () => {
-    disconnect()
-Router.push("/")
-  }
+    const { disconnect } = useDisconnect()
+
+
+
+    const Disconnect = () => {
+        disconnect()
+        Router.push("/")
+    }
 
     return (
         <>
@@ -137,34 +138,6 @@ Router.push("/")
                         </div>
                     </div>
                 </div>
-                <div style={{ "display": "none", "opacity": 0 }} className="notifcation-menu-overlay">
-                    <div className="notif-menu">
-                        <div className="pop-up-menu-top">
-                            <div className="pop-up-menu-title">Notifications</div>
-                            <a data-w-id="252542e2-0814-b6bc-9001-5c6ef5b4a040" href="#" className="link-block w-inline-block"></a>
-                        </div>
-                        <div className="notif-item">
-                            <div className="notif-title">Success! You have redeemed 2500 points. You are whitelisted for Dain Yoon.</div>
-                            <div className="text-block-14">Clear</div>
-                        </div>
-                        <div className="notif-item">
-                            <div className="notif-title">SuperNormal Couture has launched! Use promo code: Launch10 to receive 10% off your first order.</div>
-                            <div className="text-block-14">Clear</div>
-                        </div>
-                        <div className="notif-item">
-                            <div className="notif-title">ZIPS staking has arrived. Stake your zips now in your &quot;My ZIPS&quot; tab. </div>
-                            <div className="text-block-14">Clear</div>
-                        </div>
-                        <div className="notif-item">
-                            <div className="notif-title">SuperNormal is launching SN Ordinals. More details to be announced soon.</div>
-                            <div className="text-block-14">Clear</div>
-                        </div>
-                        <div className="notif-item">
-                            <div className="notif-title">Dream Girls is minting today! Be sure to follow our twitter for latest updates.</div>
-                            <div className="text-block-14">Clear</div>
-                        </div>
-                    </div>
-                </div>
                 <div className="dashboard-wrapper">
                     <SideBar />
                     <div style={{ "width": "60%" }} className="middle-panel">
@@ -176,20 +149,20 @@ Router.push("/")
                                     <div className="location">PST</div>
                                 </div>
                             </div>
-                            <div data-w-id="f5509dca-1532-b12d-10da-0fcae9fcfe01" style={{ "display": "none" }} className="div-block-69">
+                            <div  style={{ "display": "none" }} className="div-block-69">
                                 <div className="div-block-70"></div>
                             </div>
                             <div data-current="Tab 2" data-easing="ease" data-duration-in="300" data-duration-out="100" className="tabs w-tabs">
                                 <div className="tabs-menu w-tab-menu">
-                                    <a data-w-tab="Tab 1" className="tab-link w-inline-block w-tab-link">
+                                    <a data-w-tab="Tab 1" onClick={()=>{setActiveTab(true)}} className={activeTab? "tab-link w-inline-block w-tab-link w--current":"tab-link w-inline-block w-tab-link"}>
                                         <div>Main</div>
                                     </a>
-                                    <a data-w-tab="Tab 2" className="tab-link w-inline-block w-tab-link w--current">
+                                    <a data-w-tab="Tab 2" onClick={()=>{setActiveTab(false)}} className={activeTab? "tab-link w-inline-block w-tab-link":"tab-link w-inline-block w-tab-link  w--current"}>
                                         <div>My ZIPS</div>
                                     </a>
                                 </div>
                                 <div className="w-tab-content">
-                                    <div data-w-tab="Tab 1" className="w-tab-pane">
+                                    <div data-w-tab="Tab 1" className={activeTab? "w-tab-pane w--tab-active": "w-tab-pane"}>
                                         <div className="middle-menu-bottom-section">
                                             <div className="banner">
                                                 <div data-w-id="6a85ad7e-5e36-e58e-7f7f-d8b494e5253a" className="div-block-22"></div>
@@ -240,7 +213,7 @@ Router.push("/")
                                             </div>
                                         </div>
                                     </div>
-                                    <div data-w-tab="Tab 2" className="tab-pane-tab-2 w-tab-pane w--tab-active">
+                                    <div data-w-tab="Tab 2" className={activeTab? "tab-pane-tab-2 w-tab-pane": "tab-pane-tab-2 w-tab-pane w--tab-active"}>
                                         <div className="div-block-30">
                                             <div className="text-block-15">Your Collection</div>
                                         </div>
@@ -414,6 +387,7 @@ Router.push("/")
                         </div>
                     </div>
                 </div>
+                
             </Box>
         </>
     )

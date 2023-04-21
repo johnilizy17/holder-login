@@ -1077,6 +1077,12 @@
   align-items: stretch;
   border-radius: 20px;
   background-color: #1a1a1a;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.notif-menu::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
 }
 
 .pop-up-menu-title {
@@ -1382,6 +1388,12 @@
 .div-block-36 {
   display: flex;
   overflow: scroll;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.div-block-36::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
 }
 
 .text-block-19 {
