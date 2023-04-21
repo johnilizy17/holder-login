@@ -1,10 +1,68 @@
+import SideBar from '@/components/Layout/SideBar';
+import WalletAuth from '@/components/WalletAuth';
 import { Box } from '@chakra-ui/react';
-import React from 'react';
+import moment from 'moment';
+import Head from 'next/head';
+import Script from 'next/script';
+import React, { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 
 function Dashboard() {
 
+    const [userAddress, setUserAddress] = useState("loading.......")
+    const [time, setTime] = useState("loading......")
+    const [day, setDay] = useState("Good Morning")
+    const { address } = useAccount()
+    const [toggle, setToggle] = useState(false)
+
+    useEffect(() => {
+        setTime(moment(new Date).format('h:mm a'))
+        if (address) {
+            setUserAddress(address[0] + address[1] + address[2] + address[3] + address[4] + address[5] + `....` + address[38] + address[39] + address[40] + address[41])
+        }
+        var today = new Date()
+        var curHr = today.getHours()
+
+        if (curHr < 12) {
+            setDay('Good Morning')
+        } else if (curHr < 18) {
+            setDay('Good Afternoon')
+        } else {
+            setDay('Good Evening')
+        }
+    }, [])
+
+    const toggle_element = () => {
+        var element: any = document.getElementById("amount_balance");
+        element.style.opacity = (1);
+        element.style.height = ("auto")
+        element.style.transform = ("translate3d(0, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)")
+        var element2: any = document.getElementById("toggle_Amount");
+        element2.style.transform = ("rotate(180deg)");
+    element2.style.transition=("1s ease-in")
+    }
+
+
+    const toggle_elementOut = () => {
+        var element: any = document.getElementById("amount_balance");
+        element.style.opacity = (0);
+
+        element.style.transform = ("translate3d(0, 0, 0) scale3d(0.5, 0.5, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)")
+        setToggle(false)
+        var element2: any = document.getElementById("toggle_Amount");
+        element2.style.transform = ("rotate(0deg)");
+    element2.style.transition=("1s ease-in")
+    
+    }
     return (
         <>
+            <Head>
+                <title>SN Holder Login</title>
+                <meta content="width=device-width, initial-scale=1" name="viewport" />
+                <link href="https://fonts.googleapis.com" rel="preconnect" />
+                <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+                <link href="images/webclip.png" rel="apple-touch-icon" />
+            </Head>
             <Box className="body">
                 <div style={{ "display": "none", "opacity": 0 }} className="points-redeem-overlay">
                     <div className="div-block-46">
@@ -84,74 +142,13 @@ function Dashboard() {
                     </div>
                 </div>
                 <div className="dashboard-wrapper">
-                    <div className="left-panel">
-                        <div className="left-menu">
-                            <div className="left-menu-top-section">
-                                <div className="profile-block">
-                                    <div className="profile-left">
-                                        <div className="profile-pic"></div>
-                                        <div className="name-wrapper">
-                                            <div className="text-block">si-w00</div>
-                                            <a href="profile-page.html" className="link">View Profile</a>
-                                        </div>
-                                    </div>
-                                    <div className="profile-right">
-                                        <div data-w-id="73594a21-2b08-1b75-02d8-16531c28ade4" className="notification-button"></div>
-                                        <a href="profile-settings.html" className="settings-button w-inline-block"></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="left-menu-middle-section">
-                                <a href="index.html" aria-current="page" className="link-block-2 w-inline-block w--current">
-                                    <div className="left-menu-item selected">
-                                        <div className="left-menu-item-icon home"></div>
-                                        <div className="left-menu-item-text">Home</div>
-                                    </div>
-                                </a>
-                                <a href="badges-titles.html" className="link-block-2 w-inline-block">
-                                    <div className="left-menu-item">
-                                        <div className="left-menu-item-icon badges-titles"></div>
-                                        <div className="left-menu-item-text">Badges &amp; Titles</div>
-                                    </div>
-                                </a>
-                                <a href="holder-shop.html" className="link-block-2 w-inline-block">
-                                    <div className="left-menu-item">
-                                        <div className="left-menu-item-icon shop"></div>
-                                        <div className="left-menu-item-text">Holder Shop</div>
-                                    </div>
-                                </a>
-                                <a href="metaverse.html" className="link-block-2 w-inline-block">
-                                    <div className="left-menu-item">
-                                        <div className="left-menu-item-icon metaverse"></div>
-                                        <div className="left-menu-item-text">Metaverses</div>
-                                    </div>
-                                </a>
-                                <a href="profile-settings.html" className="link-block-2 w-inline-block">
-                                    <div className="left-menu-item">
-                                        <div className="left-menu-item-icon my-zips"></div>
-                                        <div className="left-menu-item-text">Settings</div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div className="left-menu-bottom-section">
-                                <div data-w-id="7c9460be-6008-68b5-e489-ef9c303f149d" className="points-balance-wrapper">
-                                    <div className="div-block-3">
-                                        <div className="user-info-icon"></div>
-                                        <div className="points-text">1000 Pts</div>
-                                    </div>
-                                    <div data-w-id="90361172-e622-fccb-c52d-046e77303089" className="redeem-points-button">
-                                        <div className="div-block-4"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <SideBar />
                     <div style={{ "width": "60%" }} className="middle-panel">
                         <div className="middle-menu">
                             <div className="middle-menu-top-section">
-                                <div className="text-block-4">Good Morning</div>
+                                <div className="text-block-4">{day}</div>
                                 <div>
-                                    <div className="time">10:30 AM</div>
+                                    <div className="time">{time}</div>
                                     <div className="location">PST</div>
                                 </div>
                             </div>
@@ -337,14 +334,14 @@ function Dashboard() {
                         </div>
                     </div>
                     <div className="right-panel">
-                        <div className="right-panel-top">
+                        <div onMouseEnter={toggle_element} onMouseLeave={toggle_elementOut} className="right-panel-top">
                             <div className="wallet-address-wrapper">
                                 <div data-hover="true" data-delay="0" data-w-id="a22f25f9-9d2b-e307-dee6-c548f27ead5c" className="wallet-dropdown w-dropdown">
-                                    <div className="dropdown-toggle-3 w-dropdown-toggle">
-                                        <div className="dropdown-icon w-icon-dropdown-toggle"></div>
-                                        <div className="wallet-address-display"><span className="wallet-address">0x12BA...34Ab</span></div>
+                                    <div className="dropdown-toggle-3 w-dropdown-toggle w--open">
+                                        <div className="dropdown-icon w-icon-dropdown-toggle" id="toggle_Amount" ></div>
+                                        <div className="wallet-address-display"><span className="wallet-address">{userAddress}</span></div>
                                     </div>
-                                    <nav style={{ "height": "0px", "opacity": 0, "WebkitTransform": "translate3d(0, 0, 0) scale3d(0.5, 0.5, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" }} className="dropdown-menu w-dropdown-list">
+                                    <nav id="amount_balance" style={{ "height": "0px", "opacity": 0, width: 129.531, "WebkitTransform": "translate3d(0, 0, 0) scale3d(0.5, 0.5, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)", transition: "1s ease-in" }} className="dropdown-menu w-dropdown-list">
                                         <div className="wallet-info-wrapper">
                                             <div className="wallet-info">Balance: 2 ETH</div>
                                         </div>
@@ -398,4 +395,4 @@ function Dashboard() {
     )
 }
 
-export default Dashboard
+export default WalletAuth(Dashboard)
