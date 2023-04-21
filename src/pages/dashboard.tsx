@@ -1,11 +1,13 @@
 import SideBar from '@/components/Layout/SideBar';
 import WalletAuth from '@/components/WalletAuth';
 import { Box } from '@chakra-ui/react';
+import { useWeb3Modal } from '@web3modal/react';
 import moment from 'moment';
 import Head from 'next/head';
+import  Router  from 'next/router';
 import Script from 'next/script';
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useDisconnect, useBalance  } from 'wagmi';
 
 function Dashboard() {
 
@@ -14,6 +16,12 @@ function Dashboard() {
     const [day, setDay] = useState("Good Morning")
     const { address } = useAccount()
     const [toggle, setToggle] = useState(false)
+   const [balanceValue, setBalanceValue]= useState({formatted:0.0})
+
+ const { data, isError, isLoading }:any = useBalance({
+            address: address,
+          })
+    
 
     useEffect(() => {
         setTime(moment(new Date).format('h:mm a'))
@@ -30,6 +38,11 @@ function Dashboard() {
         } else {
             setDay('Good Evening')
         }
+        if (address) {
+       
+          setBalanceValue(data)
+        }
+    
     }, [])
 
     const toggle_element = () => {
@@ -54,6 +67,17 @@ function Dashboard() {
     element2.style.transition=("1s ease-in")
     
     }
+
+    
+    const { disconnect } = useDisconnect()
+ 
+
+  
+  const Disconnect = () => {
+    disconnect()
+Router.push("/")
+  }
+
     return (
         <>
             <Head>
@@ -341,14 +365,14 @@ function Dashboard() {
                                         <div className="dropdown-icon w-icon-dropdown-toggle" id="toggle_Amount" ></div>
                                         <div className="wallet-address-display"><span className="wallet-address">{userAddress}</span></div>
                                     </div>
-                                    <nav id="amount_balance" style={{ "height": "0px", "opacity": 0, width: 129.531, "WebkitTransform": "translate3d(0, 0, 0) scale3d(0.5, 0.5, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)", transition: "1s ease-in" }} className="dropdown-menu w-dropdown-list">
+                                    <nav id="amount_balance" style={{ "height": "0px", "opacity": 0, "WebkitTransform": "translate3d(0, 0, 0) scale3d(0.5, 0.5, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)", transition: "1s ease-in" }} className="dropdown-menu w-dropdown-list">
                                         <div className="wallet-info-wrapper">
-                                            <div className="wallet-info">Balance: 2 ETH</div>
+                                            <div className="wallet-info">Balance: {balanceValue.formatted} ETH</div>
                                         </div>
                                         <div className="divider"></div>
                                         <div className="wallet-info-wrapper"></div>
-                                        <div className="wallet-info-wrapper">
-                                            <a href="#" className="button-3 w-button">Disconnect</a>
+                                        <div className="wallet-info-wrapper" onClick={Disconnect}>
+                                            <button className="button-3 w-button">Disconnect</button>
                                         </div>
                                     </nav>
                                 </div>
